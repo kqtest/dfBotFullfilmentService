@@ -9,15 +9,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
  }));
- 
+
 app.get('/', function(req, res){
     res.send('Welcome to Virtual Agent Bot Fullfilment Service');
 });
 
-app.post('/webhook', function(req,res){
+app.route('/').post(function(req,res){
     var action = req.body.queryResult.action;
     if(action === 'welcome'){
-        res.send('Welcome action is called');
+        res.json({
+            "fulfillmentText": "MyWebHook: Welcome action has been processed!",
+            "fulfillmentMessages": ['MyWebHook: welcome action received']
+        });
     } else if (action === 'cancelflight'){
         res.json({
             'fulfillmentMessages': [{
