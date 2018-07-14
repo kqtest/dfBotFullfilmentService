@@ -19,7 +19,11 @@ app.route('/').post(function(req,res){
     if(action === 'welcome'){
         res.json({
             "fulfillmentText": "MyWebHook: Welcome action has been processed!",
-            "fulfillmentMessages": ['MyWebHook: welcome action received']
+            "fulfillmentMessages": [{
+                'text': {
+                    'text': ['MyWebHook: Welcome action']
+                }
+            }]
         });
     } else if (action === 'cancelflight'){
         res.json({
