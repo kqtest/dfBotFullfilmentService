@@ -54,7 +54,7 @@ app.route('/').post(function(req,res){
                 sendResponseMessage(res, [`We've experience some issues, we are going to hand you to live agent.`]);
              }
         }
-    } else if(action == 'declineLodingCancel') {
+    } else if(action == 'declineLodgingCancel') {
         sendResponseMessage(res, ['Good Bye!']);
     } else {
         sendResponseMessage(res, ['I have problem understanding your intent, you need to conect with a live agent']);
