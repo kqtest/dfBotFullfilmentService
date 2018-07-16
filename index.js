@@ -30,13 +30,17 @@ app.route('/').post(function(req,res){
         let cancelResponse = executeFlightCancel();
         placeAgentQueue()
         let isPackage = findLodging();
+        let msg = ['OK, cancelled.'];
+
         //agent.add(`cancelResponse: ` + JSON.stringify(cancelResponse) + ` :: cancelResult: ` + cancelResponse.result + ` :: cancelData:` + cancelResponse.data);
         if (cancelResponse.result) {
            
-            sendResponseMessage(res, [`OK, cancelled.`]);
+            //sendResponseMessage(res, [`OK, cancelled.`]);
             if(isPackage) {
-                sendResponseMessage(res, ['Do you want to cancel your lodging as well?']);
+                msg.push('Do you want to cancel your lodging as well?');
             }
+
+            sendResponseMessage(res, msg);
            
         } else {
             //In case of real disasters
