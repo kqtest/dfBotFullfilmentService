@@ -3,6 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const util = require('./util');
+const request = require('request');
 
 const app = express();
 
@@ -29,10 +30,22 @@ app.route('/').post(function(req,res){
     } else if (action === 'cancelFlight'){
 
         let responseData = [];
+        let sessionId = req.body.session.split('/').pop();
         let cancelFlightCallPromise = executeFlightCancel();
 
+        sendResponseMessage(res, ['Processing ...']);
+
         cancelFlightCallPromise.then(function(result){
-            sendResponseMessage(res, ['Good! ' + result]);
+            //sendResponseMessage(res, ['Good! ' + result]);
+
+            sendEventToAgent(sessionId).then(function(result){
+                //handle result
+                console.log('Agent call succeeded! Body: ' + JSON.stringify(result));
+            }, function(err){
+                //handle error
+                console.log('Agent call failed! Error: ' + err);
+            });
+
         }, function(err){
             sendResponseMessage(res, ['Bad! ' + err]);
         });
@@ -92,7 +105,7 @@ function sendResponseMessage(res, messages){
 
 function executeFlightCancel() {
     let result = 'cancel flight succeeded!',
-    delay =  1000;
+    delay =  3000;
     return util.makeMockedRemoteCall(true, result, delay);
 }
 
@@ -126,4 +139,41 @@ function placeAgentQueue() {
     //STUB APIs
     var result = true;
     return result;
+}
+
+function sendEventToAgent(sessionId){
+    let agentUrl = 'https://api.dialogflow.com/api/query?v=20150910';
+
+    var postData = {
+        'event': {
+            'name': 'custom_notification',
+            'data': {
+                'result': 'my sample notification data'
+            }
+        },
+        'timezone': 'America/Los_Angeles',
+        'lang': 'en',
+        'sessionId': sessionId
+    }
+
+    var options = {
+        method: 'post',
+        body: postData,
+        json: true,
+        url: agentUrl,
+        headers: {
+            'Authorization': 'Bearer 65cf81af318847dcba95c299e87e03fd', // fe778902c95f447798ce66ce7b9d9b84',
+            'Content-Type': 'application/json'
+          }
+    }
+
+    return new Promise(function(resolve, reject){
+        request(options, function (err, res, body) {
+            if (err) {
+              reject(err);
+            } else {
+                resolve(body);
+            }
+          })
+    });
 }
