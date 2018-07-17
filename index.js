@@ -28,6 +28,7 @@ app.route('/').post(function(req,res){
         });
     } else if (action === 'cancelFlight'){
 
+        let responseData = [];
         let cancelFlightCallPromise = executeFlightCancel();
 
         cancelFlightCallPromise.then(function(result){
