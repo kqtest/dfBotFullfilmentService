@@ -2,6 +2,7 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const util = require('./util');
 
 const app = express();
 
@@ -27,25 +28,33 @@ app.route('/').post(function(req,res){
         });
     } else if (action === 'cancelFlight'){
 
-        let cancelResponse = executeFlightCancel();
-        placeAgentQueue()
-        let isPackage = findLodging();
-        let msg = ['OK, cancelled.'];
+        let cancelFlightCallPromise = executeFlightCancel();
 
-        //agent.add(`cancelResponse: ` + JSON.stringify(cancelResponse) + ` :: cancelResult: ` + cancelResponse.result + ` :: cancelData:` + cancelResponse.data);
-        if (cancelResponse.result) {
-           
-            //sendResponseMessage(res, [`OK, cancelled.`]);
-            if(isPackage) {
-                msg.push('Do you want to cancel your lodging as well?');
-            }
+        cancelFlightCallPromise.then(function(result){
+            sendResponseMessage(res, ['Good! ' + result]);
+        }, function(err){
+            sendResponseMessage(res, ['Bad! ' + err]);
+        });
 
-            sendResponseMessage(res, msg);
+
+        // placeAgentQueue()
+        // let isPackage = findLodging();
+        // let msg = ['OK, cancelled.'];
+
+        // //agent.add(`cancelResponse: ` + JSON.stringify(cancelResponse) + ` :: cancelResult: ` + cancelResponse.result + ` :: cancelData:` + cancelResponse.data);
+        // if (cancelResponse.result) {
            
-        } else {
-            //In case of real disasters
-            sendResponseMessage(res, [`We've experience some issues, we are going to hand you to live agent.`]);
-        }
+        //     //sendResponseMessage(res, [`OK, cancelled.`]);
+        //     if(isPackage) {
+        //         msg.push('Do you want to cancel your lodging as well?');
+        //     }
+
+        //     sendResponseMessage(res, msg);
+           
+        // } else {
+        //     //In case of real disasters
+        //     sendResponseMessage(res, [`We've experience some issues, we are going to hand you to live agent.`]);
+        // }
     } else if (action === 'acceptLodgingCancel'){
          //STUB APISs
          let customerResponse = true;
@@ -81,10 +90,9 @@ function sendResponseMessage(res, messages){
 }
 
 function executeFlightCancel() {
-    //STUB APIs
-    let result = true;
-   
-    return {'result':result, 'data': 'some data'};
+    let result = 'cancel flight succeeded!',
+    delay =  1000;
+    return util.makeMockedRemoteCall(true, result, delay);
 }
 
 function executeFlightCancelAxios() {
