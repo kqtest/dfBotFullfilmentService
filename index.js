@@ -30,45 +30,37 @@ app.route('/').post(function(req,res){
     } else if (action === 'cancelFlight'){
 
         let responseData = [];
-        let sessionId = req.body.session.split('/').pop();
+        //let sessionId = req.body.session.split('/').pop();
         let cancelFlightCallPromise = executeFlightCancel();
 
-        sendResponseMessage(res, ['Processing ...']);
+        //sendResponseMessage(res, ['Processing ...']);
 
         cancelFlightCallPromise.then(function(result){
             //sendResponseMessage(res, ['Good! ' + result]);
 
-            sendEventToAgent(sessionId).then(function(result){
-                //handle result
-                console.log('Agent call succeeded! Body: ' + JSON.stringify(result));
-            }, function(err){
-                //handle error
-                console.log('Agent call failed! Error: ' + err);
-            });
+        //     sendEventToAgent(sessionId).then(function(result){
+        //         //handle result
+        //         console.log('Agent call succeeded! Body: ' + JSON.stringify(result));
+        //     }, function(err){
+        //         //handle error
+        //         console.log('Agent call failed! Error: ' + err);
+        //     });
 
-        }, function(err){
-            sendResponseMessage(res, ['Bad! ' + err]);
-        });
+        placeAgentQueue();
+        let isPackage = findLodging();
+        let msg = ['OK, flight cancelled.'];
 
+        if(isPackage) {
+            msg.push('Do you want to cancel your lodging as well?');
+        }
 
-        // placeAgentQueue()
-        // let isPackage = findLodging();
-        // let msg = ['OK, cancelled.'];
+        sendResponseMessage(res, msg);
 
-        // //agent.add(`cancelResponse: ` + JSON.stringify(cancelResponse) + ` :: cancelResult: ` + cancelResponse.result + ` :: cancelData:` + cancelResponse.data);
-        // if (cancelResponse.result) {
-           
-        //     //sendResponseMessage(res, [`OK, cancelled.`]);
-        //     if(isPackage) {
-        //         msg.push('Do you want to cancel your lodging as well?');
-        //     }
+         }, function(err){
+             //sendResponseMessage(res, ['Bad! ' + err]);
+             sendResponseMessage(res, [`We've experience some issues, we are going to hand you to live agent.`]);
+         });
 
-        //     sendResponseMessage(res, msg);
-           
-        // } else {
-        //     //In case of real disasters
-        //     sendResponseMessage(res, [`We've experience some issues, we are going to hand you to live agent.`]);
-        // }
     } else if (action === 'acceptLodgingCancel'){
          //STUB APISs
          let customerResponse = true;
@@ -84,7 +76,7 @@ app.route('/').post(function(req,res){
     } else if(action == 'declineLodgingCancel') {
         sendResponseMessage(res, ['Good Bye!']);
     } else {
-        sendResponseMessage(res, ['I have problem understanding your intent, you need to conect with a live agent']);
+        sendResponseMessage(res, ['I have problem understanding your intent, we are going to hand you to live agent']);
     }
 });
 
@@ -105,7 +97,7 @@ function sendResponseMessage(res, messages){
 
 function executeFlightCancel() {
     let result = 'cancel flight succeeded!',
-    delay =  3000;
+    delay =  4000;
     return util.makeMockedRemoteCall(true, result, delay);
 }
 
