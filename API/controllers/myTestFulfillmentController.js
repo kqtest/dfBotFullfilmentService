@@ -6,11 +6,13 @@ var handleIntent = function(req, res) {
 
     if(action === 'welcome'){
          res.json(util.createFulfillmentMessages([defaultMsg, 'Welcome!!!']));
+    } else if(action == 'cancelFlight'){
+        res.json(util.createFulfillmentMessages(['Your flight is canceled!', defaultMsg]));
     } else if(action === 'followupeventtest'){
         console.log("handling followupeventtest ...");
         let responseData = util.createFulfillmentMessages(['Fulfilled - ' + action]);
         responseData.followupEventInput = {
-            "name": "followupeventtest2",
+            "name": "followupevent2",
             "languageCode": "en-US",            
             "parameters": {
                 "param": "my sample parameter"
