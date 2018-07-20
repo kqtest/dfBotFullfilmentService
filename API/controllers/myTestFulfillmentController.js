@@ -7,6 +7,7 @@ var handleIntent = function(req, res) {
     if(action === 'welcome'){
          res.json(util.createFulfillmentMessages([defaultMsg, 'Welcome!!!']));
     } else if(action === 'followupeventtest'){
+        console.log("handling followupeventtest ...");
         let responseData = util.createFulfillmentMessages(['Fulfilled - ' + action]);
         responseData.followupEventInput = {
             "name": "followupeventtest2",
@@ -18,6 +19,7 @@ var handleIntent = function(req, res) {
         res.json(responseData);
 
     } else if(action == 'followupeventtest2'){
+        console.log("handling followupeventtest2 ...");
         res.json(
             util.createFulfillmentMessages(['followup event has been processed. Action: ' + action])
         );
