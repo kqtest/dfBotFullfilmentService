@@ -12,3 +12,13 @@ module.exports.makeMockedRemoteCall = function(success, result, delayInMilliSeco
         }, delayInMilliSeconds);
     });
 };
+
+module.exports.createFulfillmentMessages = function (messages){
+    return {
+        'fulfillmentMessages': [{
+            'text': {
+                'text': messages
+            }
+        }]
+    };
+};
