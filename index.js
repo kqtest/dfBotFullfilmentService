@@ -5,6 +5,9 @@ const bodyParser = require('body-parser');
 const util = require('./util');
 const request = require('request');
 const router = require('./API/routes/fulfillmentRoutes');
+const demo1Router = require('./API/routes/demoOneRouter');
+const demo2Router = require('./API/routes/demoTwoRouter');
+const demo3Router = require('./API/routes/demoThreeRouter');
 
 const app = express();
 
@@ -14,6 +17,9 @@ app.use(bodyParser.urlencoded({
  }));
 
 app.use('/test', router);
+app.use('/demo1', demo1Router);
+app.use('/demo2', demo2Router);
+app.use('/demo3', demo3Router);
 
 app.get('/', function(req, res){
     res.send('Welcome to Virtual Agent Bot Fullfilment Service');
