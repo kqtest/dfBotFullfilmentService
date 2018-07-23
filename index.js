@@ -20,7 +20,9 @@ app.get('/', function(req, res){
 });
 
 app.route('/').post(function(req,res){
-    var action = req.body.queryResult.action;
+    let queryResult = req.body.queryResult;
+    let action = queryResult.action;
+
     if(action === 'welcome'){
         res.json({
             "fulfillmentText": "MyWebHook: Welcome action has been processed!",
@@ -78,6 +80,16 @@ app.route('/').post(function(req,res){
         }
     } else if(action == 'declineLodgingCancel') {
         sendResponseMessage(res, ['Good Bye!']);
+    } else if(action === 'cancelItin'){
+        let itinNum = queryResult.parameters["itinerary-number"].trim();
+        if(itinNum.length != 12){
+            sendResponseMessage(res, ['Intinerary number provided is invalid']);
+            return;
+        }
+        sendResponseMessage(res, ['Hi Tom, ' + itinNum + ' has Air and Lodging. Do you want to cancel Air, Lodging or all?']);
+    } else if(action === 'cancelItineraryProduct'){
+        let product = queryResult.product;
+        sendResponseMessage(res, ['OK, ' + product + ' is canceled.']);
     } else {
         sendResponseMessage(res, ['I have problem understanding your intent, we are going to hand you to live agent']);
     }
