@@ -8,7 +8,7 @@ var handleIntent = function(req, res) {
     let queryResult = req.body.queryResult;
     let action = queryResult.action;
     console.log("handling action: " + action);
-    console.log("Request Body: " + queryResult.body);
+    console.log("Request Body: " + JSON.stringify(queryResult));
 
     let defaultMsg = 'Welcome to DEMO fulfillment service! action = ' + action;
     
