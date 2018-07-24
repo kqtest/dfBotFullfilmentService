@@ -36,9 +36,16 @@ var handleIntent = function(req, res) {
         let email = queryResult.outputContexts[0].parameters["email"].trim();
         let userName = email.split('@')[0];
         if(itin) {
-            res.json(
-                util.createFulfillmentMessages(['Hi ' + userName + ', your booking is already cancelled, second refund will be convinient for you.'])
-            );
+            if(itinsAlreadyCanceled.includes(itin)){
+                res.json(
+                    util.createFulfillmentMessages(['Hi ' + userName + ', your booking is already cancelled, second refund will be convinient for you.'])
+                );
+            } else {
+                res.json(
+                    util.createFulfillmentMessages(['Ok, your booking is cancelled.'])
+                );                                
+            }
+
         } else {
             res.json(
                 util.createFulfillmentMessages(['Itinerary number is not valid'])
