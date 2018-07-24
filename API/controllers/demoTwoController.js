@@ -1,6 +1,7 @@
 const util = require('../../util');
 
 let itinsAlreadyCanceled = [ '789789789789'];
+let packageItins = ['777788889999'];
 let validEmails = [ 'todd@expedia.com', 'ryan@expedia.com', 'tom@gmail.com'];
 let validPhones = [ '4253332222' ];
 
@@ -33,19 +34,26 @@ var handleIntent = function(req, res) {
         }
     } else if(action === 'getItineraryNumber'){
         let itin = queryResult.parameters["itineraryNumber"];
-        let email = queryResult.outputContexts[0].parameters["email"].trim();
+        let context = queryResult.outputContexts.find(function(x){
+            return x.parameters && x.parameters["email"]; 
+        });
+        let email = context.parameters["email"];
         let userName = email.split('@')[0];
+        userName = userName.charAt(0).toUpperCase() + userName.slice(1);
         if(itin) {
             if(itinsAlreadyCanceled.includes(itin)){
                 res.json(
                     util.createFulfillmentMessages(['Hi ' + userName + ', your booking is already cancelled, second refund will be convinient for you.'])
+                );
+            } else if(packageItins.includes(itin)){
+                res.json(
+                    util.createFulfillmentMessages(["Welcome " + userName + ", the itinerary is part of a package. Do you want to cancel Air, Lodging or both?"])
                 );
             } else {
                 res.json(
                     util.createFulfillmentMessages(['Ok, your booking is cancelled.'])
                 );                                
             }
-
         } else {
             res.json(
                 util.createFulfillmentMessages(['Itinerary number is not valid'])

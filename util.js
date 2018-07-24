@@ -15,9 +15,9 @@ module.exports.makeMockedRemoteCall = function(success, result, delayInMilliSeco
 
 module.exports.createFulfillmentMessages = function (messages){
     return {
-        'fulfillmentMessages': [{
-            'text': {
-                'text': messages
+        "fulfillmentMessages": [{
+            "text": {
+                "text": messages
             }
         }]
     };
