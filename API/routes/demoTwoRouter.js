@@ -1,7 +1,7 @@
 const express = require('express');
 var router = express.Router();
 
-const controller = require('../controllers/demoOneController');
+const controller = require('../controllers/demoTwoController');
 
 router.use(function(req, res, next){
     console.log(req.method, req.originalUrl);
