@@ -43,7 +43,7 @@ var handleIntent = function(req, res) {
         if(itin) {
             if(itinsAlreadyCanceled.includes(itin)){
                 res.json(
-                    util.createFulfillmentMessages(["Hmm.. looks like we already cancelled and refunded you yesterday. Are you sure you have your glasses on and are entering in the right Itinerary number?"])
+                    util.createFulfillmentMessages(["Hmm.. looks like we already cancelled and refunded you yesterday. Are you sure you have your glasses on and are entering the correct Itinerary number?"])
                 );
             } else if(packageItins.includes(itin)){
                 res.json(
