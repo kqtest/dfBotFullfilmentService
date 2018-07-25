@@ -29,7 +29,7 @@ var handleIntent = function(req, res) {
             );            
         } else {
             res.json(
-                util.createFulfillmentMessages(['We cannot recognize you.'])
+                util.createFulfillmentMessages(['We cannot recognize you. Can you try again?'])
             );
         }
     } else if(action === 'getItineraryNumber'){
@@ -43,7 +43,7 @@ var handleIntent = function(req, res) {
         if(itin) {
             if(itinsAlreadyCanceled.includes(itin)){
                 res.json(
-                    util.createFulfillmentMessages(['Hi ' + userName + ', your booking is already cancelled, second refund will be convinient for you.'])
+                    util.createFulfillmentMessages(["Hmm.. looks like we already cancelled and refunded you yesterday. Are you sure you have your glasses on and are entering in the right Itinerary number?"])
                 );
             } else if(packageItins.includes(itin)){
                 res.json(
